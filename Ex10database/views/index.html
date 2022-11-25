@@ -14,13 +14,59 @@
             <th>닉네임</th>
         </tr>
         {% for item in list %}
-        <tr>
+        <tr class="row{{loop.index}}">
             <td class="id">{{item.id}}</td>
             <td class="pw">{{item.pw}}</td>
             <td class="nick">{{item.nick}}</td>
+            <td><button onclick="selectOne('{{loop.index}}')">이 회원 정보만 조회</button></td>
+            <td><button onclick="location.href='/delete/{{item.id}}'">삭제</button></td>
+            <td><button onclick="update('{{loop.index}}')">수정</button></td>
         </tr>
         {% endfor %}
     </table>
+
+    <script>
+
+        async function selectOne(index){     
+            let id = document.querySelector('.row'+index+'>.id').innerText
+
+            // /select/id 요청 (비동기방식)
+            // 버튼을 누르면 서버로 요청해서 해당 회원정보만 가지고 와서 아래 테이블에 id,pw,nick 출력
+
+            // 어디로 요청할지 url 지정
+            const reqURL = 'select/'+id
+
+            // 값이 올 때 까지 기다리는 장치
+            // 비동기는 promise형식으로 받기 때문에 json형식으로 바꿔서 받아줘야한다
+            // json형식으로 바뀐 데이터를 res2로 사용하자
+            await fetch(reqURL).then((res)=>res.json().then((res2)=>{
+                    console.log(res2)
+                    
+                    document.getElementById('searchId').innerText =res2.listOne[0].id
+                    document.getElementById('searchPw').innerText =res2.listOne[0].pw
+                    document.getElementById('searchNick').innerText =res2.listOne[0].nick
+            }))
+        }
+
+        async function update(index){
+            let id = document.querySelector('.row'+index+'>.id').innerText
+
+            const reqURL = 'select/'+id
+
+            await fetch(reqURL).then((res)=>res.json().then((res2)=>{
+                console.log(res2)
+
+                document.querySelector('#updateId').value = res2.listOne[0].id
+                document.querySelector('#updatePw').value = res2.listOne[0].pw
+                document.querySelector('#updateNick').value = res2.listOne[0].nick
+
+            }))
+        }
+
+    </script>
+
+
+
     <h3>특정회원정보 조회</h3>
     <table border="1">
         <tr>
@@ -42,7 +88,7 @@
         <input type="submit" value="INSERT">
     </form>
     <H3>회원 정보 수정</H3>
-    <form action="" method="">
+    <form action="update" method="post">
         ID : <input type="text" name="id" id="updateId" readonly><br>
         PW : <input type="text" name="pw" id="updatePw"><br>
         NICK : <input type="text" name="nick" id="updateNick"><br>
