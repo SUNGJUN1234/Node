@@ -26,13 +26,13 @@ module.exports = class User extends Sequelize.Model{
         })
     }
     static associate(db){
-        // User 와 Project라는 객체가 있을 때
-        // User 와 Project가 일 대 다 관계라면? *
-        // * db.User.hasMany(db.Project,{foreignKey : 'id',sourceKey : 'id'})    // 1
-        // 1 대 1 관계라면? : dbUser.hasOne
-        
-        // * db.Project.belongsTo(db.User,{foreignKey : 'id',targetKey : 'id'})  // 多
-        // 다 대 다 관계라면? : db.belongsToMany
+        // User / Project
+        // db.User.hasMany(db.Project,{foreignKey : 'id',sourceKey : 'id'})     // 1:N
+        // db.User.hasOne                                                       // 1:1
+        // db.User.belongsToMany                                                // N:M
+        // db.Project.belongsTo(db.User,{foreignKey : 'id',targetKey : 'id'})   // 1:1
+        // db.Project.belongsToMany                                             // N:M
+
     }
 
 }
