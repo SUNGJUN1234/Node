@@ -22,7 +22,6 @@ router.post('/insert', async(req,res,next)=>{
 router.get('/book/selectall', async(req,res,next)=>{
     try{
         const books = await Books.findAll()
-
         res.json(books)
     }catch(err){
         next(err)

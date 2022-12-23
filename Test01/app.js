@@ -22,6 +22,7 @@ app.use(session({
 }))
 
 app.use('/',indexRouter)
+// app.use('/book',indexRouter)
 
 sequelize.sync({force : false})
     .then(()=>{
